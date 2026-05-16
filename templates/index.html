@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Movie Recommender</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <h1 class="logo">AIFlix<span>.</span></h1>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#">TV Shows</a></li>
+                <li><a href="#">Movies</a></li>
+                <li><a href="#">New & Popular</a></li>
+                <li><a href="#">My List</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" placeholder="Titles, people, genres">
+            </div>
+            <i class="fas fa-bell"></i>
+            <div class="profile-menu">
+                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80" alt="Profile" class="profile-img">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Results Overlay -->
+    <div id="search-results-container" class="search-overlay hidden">
+        <h2>Search Results</h2>
+        <div id="search-results" class="movie-grid"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-bg">
+                <img src="https://image.tmdb.org/t/p/original/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg" alt="Hero Background">
+                <div class="hero-vignette"></div>
+            </div>
+            <div class="hero-content">
+                <span class="ai-badge"><i class="fas fa-robot"></i> 98% Match</span>
+                <h1 class="hero-title">The Matrix</h1>
+                <p class="hero-description">When a beautiful stranger leads computer hacker Neo to a forbidding underworld, he discovers the shocking truth--the life he knows is the elaborate deception of an evil cyber-intelligence.</p>
+                <div class="hero-buttons">
+                    <a href="https://www.imdb.com/title/tt0133093/" target="_blank" class="btn btn-play" style="text-decoration: none;"><i class="fab fa-imdb" style="color: #f5c518;"></i> Watch on IMDb</a>
+                    <button class="btn btn-info"><i class="fas fa-info-circle"></i> More Info</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sections -->
+        <section class="movie-row">
+            <h2>Recommended for You <span class="ai-insight" title="Based on your viewing history"><i class="fas fa-magic"></i> AI Picked</span></h2>
+            <div class="carousel-container">
+                <button class="carousel-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                <div class="carousel" id="recommended-movies">
+                    <!-- Populated by JS -->
+                </div>
+                <button class="carousel-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </section>
+
+        <!-- Mood Selector -->
+        <section class="movie-row mood-section">
+            <div class="mood-header">
+                <h2>What's your mood today?</h2>
+                <div class="mood-pills">
+                    <button class="mood-pill active" data-mood="Happy">Happy</button>
+                    <button class="mood-pill" data-mood="Excited">Excited</button>
+                    <button class="mood-pill" data-mood="Relaxed">Relaxed</button>
+                    <button class="mood-pill" data-mood="Motivated">Motivated</button>
+                    <button class="mood-pill" data-mood="Sad">Sad</button>
+                </div>
+            </div>
+            <div class="carousel-container">
+                <button class="carousel-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                <div class="carousel" id="mood-movies">
+                    <!-- Populated by JS -->
+                </div>
+                <button class="carousel-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </section>
+
+        <section class="movie-row">
+            <h2>Trending Now</h2>
+            <div class="carousel-container">
+                <button class="carousel-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                <div class="carousel" id="trending-movies">
+                    <!-- Populated by JS -->
+                </div>
+                <button class="carousel-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </section>
+
+        <section class="movie-row">
+            <h2>Because you watched "The Matrix"</h2>
+            <div class="carousel-container">
+                <button class="carousel-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                <div class="carousel" id="similar-movies">
+                    <!-- Populated by JS -->
+                </div>
+                <button class="carousel-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Onboarding Modal -->
+    <div id="onboarding-modal" class="modal">
+        <div class="modal-content onboarding-content">
+            <h1 style="text-align: center; margin-bottom: 20px;">Welcome to AIFlix.</h1>
+            <p style="text-align: center; color: #a3a3a3; margin-bottom: 30px;">Let's personalize your experience. Select your favorite genres:</p>
+            
+            <div class="genre-selector">
+                <button class="genre-btn" data-genre="Action">Action</button>
+                <button class="genre-btn" data-genre="Sci-Fi">Sci-Fi</button>
+                <button class="genre-btn" data-genre="Romance">Romance</button>
+                <button class="genre-btn" data-genre="Comedy">Comedy</button>
+                <button class="genre-btn" data-genre="Drama">Drama</button>
+                <button class="genre-btn" data-genre="Thriller">Thriller</button>
+                <button class="genre-btn" data-genre="Horror">Horror</button>
+                <button class="genre-btn" data-genre="Animation">Animation</button>
+                <button class="genre-btn" data-genre="Crime">Crime</button>
+                <button class="genre-btn" data-genre="Adventure">Adventure</button>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <button id="finish-onboarding-btn" class="btn btn-play" style="margin: 0 auto;" disabled>Start Watching</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Movie Details Modal -->
+    <div id="movie-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-hero">
+                <img id="modal-img" src="" alt="">
+                <div class="modal-vignette"></div>
+                <h1 id="modal-title">Title</h1>
+                <div class="modal-actions">
+                    <a href="#" id="modal-play-btn" target="_blank" class="btn btn-play" style="text-decoration: none;"><i class="fab fa-imdb" style="color: #f5c518;"></i> Watch on IMDb</a>
+                    <button class="btn btn-circle"><i class="fas fa-plus"></i></button>
+                    <button class="btn btn-circle"><i class="far fa-thumbs-up"></i></button>
+                    <button class="btn btn-circle"><i class="far fa-thumbs-down"></i></button>
+                </div>
+            </div>
+            <div class="modal-info">
+                <div class="modal-info-left">
+                    <div class="meta-info">
+                        <span class="match-score" id="modal-match">95% Match</span>
+                        <span class="rating" id="modal-rating">PG-13</span>
+                        <span class="duration">2h 15m</span>
+                        <span class="hd-badge">HD</span>
+                    </div>
+                    <p class="modal-desc" id="modal-desc">Description goes here.</p>
+                </div>
+                <div class="modal-info-right">
+                    <p><strong>Cast:</strong> <span id="modal-cast">Actor A, Actor B</span></p>
+                    <p><strong>Genres:</strong> <span id="modal-genres">Action, Sci-Fi</span></p>
+                    <p><strong>Mood:</strong> <span id="modal-mood">Excited</span></p>
+                </div>
+            </div>
+            
+            <!-- Modal AI Insights -->
+            <div class="ai-insight-box">
+                <h3><i class="fas fa-brain"></i> AI Analysis</h3>
+                <p>We recommend this movie because it shares themes of advanced technology and thrilling action sequences with your favorite genre, Sci-Fi. The similarity confidence score is very high based on our NLP content analysis.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
