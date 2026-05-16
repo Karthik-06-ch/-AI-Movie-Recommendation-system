@@ -93,13 +93,39 @@ function setupStaticButtons() {
             
             if(link.innerText === 'My List') {
                 showMyList();
+            } else if (link.innerText === 'New & Popular') {
+                fetch('/api/trending')
+                    .then(res => res.json())
+                    .then(data => {
+                        const container = document.getElementById('search-results');
+                        container.innerHTML = '';
+                        data.forEach(movie => createMovieCard(movie, 'search-results'));
+                        document.getElementById('search-results-container').querySelector('h2').innerText = 'New & Popular';
+                        document.getElementById('search-results-container').classList.remove('hidden');
+                        document.getElementById('main-content').style.display = 'none';
+                    });
+            } else if (link.innerText === 'Movies') {
+                // For "Movies", we'll just show the trending + recommended as a gallery
+                fetch('/api/trending')
+                    .then(res => res.json())
+                    .then(data => {
+                        const container = document.getElementById('search-results');
+                        container.innerHTML = '';
+                        data.forEach(movie => createMovieCard(movie, 'search-results'));
+                        document.getElementById('search-results-container').querySelector('h2').innerText = 'All Movies';
+                        document.getElementById('search-results-container').classList.remove('hidden');
+                        document.getElementById('main-content').style.display = 'none';
+                    });
+            } else if (link.innerText === 'TV Shows') {
+                const container = document.getElementById('search-results');
+                container.innerHTML = '<p>No TV Shows available at the moment. Please check out our Movies!</p>';
+                document.getElementById('search-results-container').querySelector('h2').innerText = 'TV Shows';
+                document.getElementById('search-results-container').classList.remove('hidden');
+                document.getElementById('main-content').style.display = 'none';
             } else {
-                // Restore main content if it was hidden
+                // Home
                 document.getElementById('search-results-container').classList.add('hidden');
                 document.getElementById('main-content').style.display = 'block';
-                if(link.innerText !== 'Home') {
-                    showToast('Browsing ' + link.innerText);
-                }
             }
         });
     });
